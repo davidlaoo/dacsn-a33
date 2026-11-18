@@ -8,11 +8,13 @@ services:
       - PS_COUNTRY=ES
       - PS_FOLDER_ADMIN=admin-tienda
       - PS_FOLDER_INSTALL=install-tienda
-      - PS_DOMAIN=${DIRECCION}:${PUERTO}
-      - DB_SERVER=${MARIADB_DATABASE:?Prestashop nec}
-      - DB_NAME=
-      - DB_USER=
-      - DB_PASSWD=
+      - PS_DOMAIN=${DIRECCION:-0.0.0.0}:${PUERTO:-8080}
+      - DB_SERVER=${MARIADB_DATABASE:?Prestashop necesita un SGBD al que apuntar}
+      - DB_NAME=${DB_NAME:-datos}
+      - DB_USER=${DB_USER:-usuario}
+      - DB_PASSWD=${DB_PASSWD:?Prestashop necesita una passwd}
+      - ADMIN_MAIL=${ADMIN_MAIL:-ejemplo@servidor.com}
+      - ADMIN_PASSWD=${ADMIN_PASSWD:?Prestashop necesita passwd admin}
     volumes:
       - ficheros-tienda:/var/www/html
     networks:
@@ -33,11 +35,12 @@ services:
     networks:
       - interna
     environment:
-      - MARIADB_DATABASE=${MARIADB_DATABASE:?MariaDB necesita nombre BD}
-      - MARIADB_USER=${MARIADB_USER:?MariaDB necesita usuario BD}
+      - MARIADB_DATABASE=${MARIADB_DATABASE:-datos}
+      - MARIADB_USER=${MARIADB_USER:-usuario}
       - MARIADB_PASSWORD=${MARIADB_PASSWORD:?MariaDB necesita passwd BD}
+      - MARIADB_ROOT_PASSWORD=${MARIADB_RANDOM_ROOT_PASSWORD:-1}
     healthcheck:
-      test: ["CMD", "healthcheck.sh --connect --innodb_initialized"]
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       interval: 5s
       timeout: 3s
       retries: 10
@@ -47,6 +50,8 @@ services:
 
   correo:
     image: axllent/mailpit:v1.32
+    ports:
+      - "${PUERTO_CORREO:-8025}:8025"
     restart: unless-stopped
     networks:
       - interna
@@ -54,6 +59,9 @@ services:
 
   adminer:
     image: adminer:5
+    ports:
+      - "${PUERTO_ADMINER:-8081}:8080"
+    profiles: ["herramientas"]
     restart: unless-stopped
     networks:
       - interna
