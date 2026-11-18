@@ -1,12 +1,63 @@
 services:
   tienda:
+    image: prestashop/prestashop:8.2
+    environment:
+      - PS_DEMO_MODE=0
+      - PS_INSTALL_AUTO=1
+      - PS_LANGUAGE=es
+      - PS_COUNTRY=ES
+      - PS_FOLDER_ADMIN=admin-tienda
+      - PS_FOLDER_INSTALL=install-tienda
+      - PS_DOMAIN=${DIRECCION}:${PUERTO}
+      
+    volumes:
+      - ficheros-tienda:/var/www/html
+    networks:
+      - interna
+    ports:
+      - "${PUERTO:-8080}:80"
+    depends_on:
+      bd:
+        condition: service_healthy
+      correo:
+        condition: service_started
+    restart: unless-stopped
 
   bd:
+    image: mariadb:11.8
+    volumes:
+      - datos-bd:/var/lib/mysql
+    networks:
+      - interna
+    environment:
+      - MARIADB_DATABASE=${MARIADB_DATABASE:?MariaDB necesita nombre BD}
+      - MARIADB_USER=${MARIADB_USER:?MariaDB necesita usuario BD}
+      - MARIADB_PASSWORD=${MARIADB_PASSWORD:?MariaDB necesita passwd BD}
+    healthcheck:
+      test: ["CMD", "healthcheck.sh --connect --innodb_initialized"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+
 
   correo:
-  
+    image: axllent/mailpit:v1.32
+    restart: unless-stopped
+    networks:
+      - interna
+
+
+  adminer:
+    image: adminer:5
+    restart: unless-stopped
+    networks:
+      - interna
 
 volumes:
+  datos-bd:
+  ficheros-tienda:
 
 networks:
   interna:
