@@ -9,7 +9,10 @@ services:
       - PS_FOLDER_ADMIN=admin-tienda
       - PS_FOLDER_INSTALL=install-tienda
       - PS_DOMAIN=${DIRECCION}:${PUERTO}
-      
+      - DB_SERVER=${MARIADB_DATABASE:?Prestashop nec}
+      - DB_NAME=
+      - DB_USER=
+      - DB_PASSWD=
     volumes:
       - ficheros-tienda:/var/www/html
     networks:
