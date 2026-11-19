@@ -35,9 +35,9 @@ services:
     networks:
       - interna
     environment:
-      - MARIADB_DATABASE=${MARIADB_DATABASE:-datos}
-      - MARIADB_USER=${MARIADB_USER:-usuario}
-      - MARIADB_PASSWORD=${MARIADB_PASSWORD:?MariaDB necesita passwd BD}
+      - MARIADB_DATABASE=${DB_NAME:-datos}
+      - MARIADB_USER=${DB_USER:-usuario}
+      - MARIADB_PASSWORD=${DB_PASSWD:?MariaDB necesita passwd BD}
       - MARIADB_ROOT_PASSWORD=${MARIADB_RANDOM_ROOT_PASSWORD:-1}
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]

@@ -1,0 +1,10 @@
+services:
+  forgejo:
+    image:
+
+networks:
+  interna:
+
+volumes:
+  datos-bd:
+  datos-cache:
