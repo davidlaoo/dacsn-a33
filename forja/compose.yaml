@@ -13,17 +13,17 @@ services:
       - FORGEJO__database__USER=${FORGEJO__database__USER:-usuario}
       - FORGEJO__database__PASSWD=${FORGEJO__database__PASSWD:?forgejo necesita secreto bd}
 
-      - FORGEJO__server__DOMAIN=${:-}
-      - FORGEJO__server__ROOT_URL=${:-}
-      - FORGEJO__server__SSH_PORT=${:-}
-      - FORGEJO__server__SSH_LISTEN_PORT=${:-}
+      - FORGEJO__server__DOMAIN=${FORGEJO__server__DOMAIN:-localhost}
+      - FORGEJO__server__ROOT_URL=${FORGEJO__server__ROOT_URL:?forgejo necesita root url}
+      - FORGEJO__server__SSH_PORT=${FORGEJO__server__SSH_PORT:-${PUERTO_SSH:-2222}}
+      - FORGEJO__server__SSH_LISTEN_PORT=${FORGEJO__server__SSH_LISTEN_PORT:-22}
 
       - FORGEJO__security__INSTALL_LOCK=${FORGEJO__security__INSTALL_LOCK:-true}
-      - FORGEJO__mailer__ENABLED=${:-}
-      - FORGEJO__mailer__PROTOCOL=${:-}
-      - FORGEJO__mailer__SMTP_ADDR=${:-}
-      - FORGEJO__mailer__SMTP_PORT=${:-}
-      - FORGEJO__mailer__FROM=${:-}
+      - FORGEJO__mailer__ENABLED=${FORGEJO__mailer__ENABLED:-true}
+      - FORGEJO__mailer__PROTOCOL=${FORGEJO__mailer__PROTOCOL:-smtp}
+      - FORGEJO__mailer__SMTP_ADDR=${FORGEJO__mailer__SMTP_ADDR:-correo}
+      - FORGEJO__mailer__SMTP_PORT=${FORGEJO__mailer__SMTP_PORT:-1025}
+      - FORGEJO__mailer__FROM=${FORGEJO__mailer__FROM:-blog@dacsn.local}
 
       - FORGEJO__cache__ADAPTER=${FORGEJO__cache__ADAPTER:-redis}
       - FORGEJO__cache__HOST=${URL_REDIS:?forgejo cache necesita url redis}
