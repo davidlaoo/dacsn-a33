@@ -18,21 +18,21 @@ services:
       - FORGEJO__server__SSH_PORT=${:-}
       - FORGEJO__server__SSH_LISTEN_PORT=${:-}
 
-      - FORGEJO__security__INSTALL_LOCK=${:-true}
+      - FORGEJO__security__INSTALL_LOCK=${FORGEJO__security__INSTALL_LOCK:-true}
       - FORGEJO__mailer__ENABLED=${:-}
       - FORGEJO__mailer__PROTOCOL=${:-}
       - FORGEJO__mailer__SMTP_ADDR=${:-}
       - FORGEJO__mailer__SMTP_PORT=${:-}
       - FORGEJO__mailer__FROM=${:-}
 
-      - FORGEJO__cache__ADAPTER=${:-}
-      - FORGEJO__cache__HOST=${:-}
+      - FORGEJO__cache__ADAPTER=${FORGEJO__cache__ADAPTER:-redis}
+      - FORGEJO__cache__HOST=${URL_REDIS:?forgejo cache necesita url redis}
 
-      - FORGEJO__session__PROVIDER=${:-}
-      - FORGEJO__session__PROVIDER_CONFIG=${:-}
+      - FORGEJO__session__PROVIDER=${FORGEJO__session__PROVIDER:-redis}
+      - FORGEJO__session__PROVIDER_CONFIG=${URL_REDIS:?forgejo session necesita url redis}
 
-      - FORGEJO__queue__TYPE=${:-}
-      - FORGEJO__queue__CONN_STR=${:-}
+      - FORGEJO__queue__TYPE=${FORGEJO__queue__TYPE:-redis}
+      - FORGEJO__queue__CONN_STR=${URL_REDIS:?forgejo queue necesita url redis}
 
       - USER_UID=${USER_UID:-1000}
       - USER_GID=${USER_GID:-1000}
