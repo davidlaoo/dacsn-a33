@@ -1,0 +1,31 @@
+services:
+  web:
+    image: nginx:1.30
+    ports:
+      - "${PUERTO:-8080}:80"
+    networks:
+      - frontal
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d
+      - codigo:/etc/nginx:ro
+
+
+  yourls:
+    image: yourls:fpm
+    networks:
+      - frontal
+      - interna
+
+
+  bd:
+    image: mariadb:11.8
+    networks:
+      - interna
+
+networks:
+  frontal:
+  interna:
+
+volumes:
+  codigo:
+  datos-bd:
