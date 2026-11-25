@@ -8,10 +8,10 @@ services:
       - "${PUERTO_SSH:-2222}:22"
     environment:
       - FORGEJO__database__DB_TYPE=${FORGEJO__database__DB_TYPE:-postgres}
-      - FORGEJO__database__HOST=${FORGEJO__database__HOST:-localhost}
+      - FORGEJO__database__HOST=${FORGEJO__database__HOST:-bd}
       - FORGEJO__database__NAME=${FORGEJO__database__NAME:-ejemplo}
       - FORGEJO__database__USER=${FORGEJO__database__USER:-usuario}
-      - FORGEJO__database__PASSWD=${FORGEJO__database__PASSWD:?forgejo necesita secreto bd}
+      - FORGEJO__database__PASSWD=${POSTGRES_PASSWORD:?forgejo necesita secreto bd}
 
       - FORGEJO__server__DOMAIN=${FORGEJO__server__DOMAIN:-localhost}
       - FORGEJO__server__ROOT_URL=${FORGEJO__server__ROOT_URL:?forgejo necesita root url}

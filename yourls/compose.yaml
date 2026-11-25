@@ -6,15 +6,18 @@ services:
     networks:
       - frontal
     volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d
+      - ./nginx/default.conf:/etc/nginx/conf.d:ro
       - codigo:/etc/nginx:ro
 
 
   yourls:
-    image: yourls:fpm
+    image: yourls:1.10.6-fpm
     networks:
       - frontal
       - interna
+    volumes:
+      - codigo:/var/www/html
+    # environment
 
 
   bd:
