@@ -8,6 +8,9 @@ services:
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d:ro
       - codigo:/etc/nginx:ro
+    depends_on:
+      yourls:
+        condition: service_started
 
 
   yourls:
@@ -18,12 +21,29 @@ services:
     volumes:
       - codigo:/var/www/html
     # environment
+    depends_on:
+      bd:
+        condition: service_healthy
 
 
   bd:
     image: mariadb:11.8
+    volumes:
+      - datos-bd:/var/lib/mysql
     networks:
       - interna
+    environment:
+      - MARIADB_DATABASE=${DB_NAME:-datos}
+      - MARIADB_USER=${DB_USER:-usuario}
+      - MARIADB_PASSWORD=${DB_PASSWD:?MariaDB necesita passwd}
+      - MARIADB_ROOT_PASSWORD=${MARIADB_RANDOM_ROOT_PASSWORD:-1}
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
 
 networks:
   frontal:
